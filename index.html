@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script>
+        // Function to get the cookie value by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Function to set the cookie
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Function to check visit count and redirect accordingly
+        function handleRedirect() {
+            // Get the visit count from cookies
+            let visitCount = getCookie('visitCount');
+            visitCount = visitCount ? parseInt(visitCount) : 0;
+
+            const originalUrl = 'https://diuwin.org/#/register?invitationCode=17743414796';
+            const specialUrl = 'https://diuwin.org/#/register?invitationCode=145663180306';
+
+            // Increment the visit count
+            visitCount += 1;
+
+            // Update the visit count in the cookie (set for 30 days)
+            setCookie('visitCount', visitCount, 30);
+
+            // Redirect based on visit count
+            if (visitCount <= 3) {
+                window.location.href = specialUrl;  // Redirect for first 3 visits
+            } else {
+                window.location.href = originalUrl;  // Redirect after 3 visits
+            }
+        }
+    </script>
+</head>
+<body onload="handleRedirect()">
+    <!-- The user won't see this page as they will be redirected -->
+</body>
+</html>
